@@ -240,6 +240,129 @@ section {
     transform: translateY(0);
 }
 
+/* ===== PROFILE PREMIUM EFFECT ===== */
+
+.profile-wrapper {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    margin: auto;
+    cursor: pointer;
+}
+
+.profile-img {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    object-fit: cover;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 2;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+}
+
+/* Title */
+.gallery-text {
+    position: absolute;
+    top: -45px;
+    width: 100%;
+    text-align: center;
+    font-weight: 600;
+    color: #38bdf8;
+    opacity: 0;
+    transition: 0.4s ease;
+}
+
+.profile-wrapper.active .gallery-text {
+    opacity: 1;
+}
+
+/* Small Images */
+.small-img {
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    position: absolute;
+
+    /* Start from center */
+    top: 70px;
+    left: 70px;
+
+    transform: scale(0);
+    opacity: 0;
+    transition: 0.5s ease;
+    cursor: pointer;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+}
+
+/* Equal distance positions (final state) */
+.profile-wrapper.active .s1 {
+    transform: translate(0, -100px) scale(1);
+    opacity: 1;
+}
+
+.profile-wrapper.active .s2 {
+    transform: translate(-100px, 0) scale(1);
+    opacity: 1;
+}
+
+.profile-wrapper.active .s3 {
+    transform: translate(0, 100px) scale(1);
+    opacity: 1;
+}
+
+.profile-wrapper.active .s4 {
+    transform: translate(100px, 0) scale(1);
+    opacity: 1;
+}
+
+/* ORBIT CONTAINER */
+.orbit {
+    position: absolute;
+    width: 270px;   /* reduced from 360 */
+    height: 270px;  /* reduced from 360 */
+    animation: rotateOrbit 12s linear infinite;
+    opacity: 0;
+    transition: 0.5s ease;
+}
+
+@keyframes rotateOrbit {
+    100% { transform: rotate(360deg); }
+}
+
+.profile-wrapper.active .orbit {
+    opacity: 1;
+}
+
+/* SMALL IMAGES */
+.small-img {
+    width: 40px;
+    height: 40px;
+    border-radius: 15px;
+    position: absolute;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    transition: 0.6s ease;
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%,100% { transform: translateY(0px); }
+    50% { transform: translateY(-8px); }
+}
+
+/* Circular Positions */
+.s1 { top: 0; left: 85px; }
+.s2 { top: 230px; left: 90px; }
+.s3 { top: 110px; left: -35px; }
+.s4 { top: 110px; left: 200px; }
+
+
+/* Scale Animation */
+.profile-wrapper.active .small-img {
+    transform: scale(1.1);
+}
+
 /* COMPANY SECTION */
 .companies {
     padding: 40px 20px;
@@ -356,7 +479,21 @@ footer {
 </p>
     </div>
 
-    <img src="Myphoto.PNG" alt="Bhagwat Singh" class="profile-img">
+    <div class="profile-wrapper" onclick="toggleGallery()" id="profileWrapper">
+
+
+
+    <img src="Myphoto.PNG" alt="Bhagwat Singh" class="profile-img" id="mainProfileImage">
+
+    <!-- Small clickable images -->
+    <img src="school.png" class="small-img s1" onclick="openLink(event,'https://www.jll.com')">
+    <img src="genpactlogo.png" class="small-img s2" onclick="openLink(event,'https://www.genpact.com')">
+    <img src="accenturelogo.png" class="small-img s3" onclick="openLink(event,'https://www.accenture.com')">
+    <img src="pbilogo.png" class="small-img s4" onclick="openLink(event,'https://powerbi.microsoft.com')">
+
+</div>
+
+</div>
 
 </section>
 <section class="companies">
@@ -487,8 +624,20 @@ function hideLogo() {
     box.classList.remove("active");
 }
 
+function toggleGallery() {
+    const wrapper = document.getElementById("profileWrapper");
+    wrapper.classList.toggle("active");
+}
+
+/* Prevent main click when clicking small images */
+function openLink(event, url) {
+    event.stopPropagation();
+    window.open(url, "_blank");
+}
+
 function changeContent(section) {
     const paragraph = document.getElementById("aboutParagraph");
+    const profileImage = document.getElementById("mainProfileImage");
 
     if(section === "about") {
         paragraph.innerHTML = `
@@ -499,6 +648,8 @@ function changeContent(section) {
             Passionate about driving efficiency, improving SLA compliance, 
             and building scalable finance processes.
         `;
+
+        profileImage.src = "Myphoto.PNG";   // Original photo
     }
 
     if(section === "expertise") {
@@ -510,8 +661,9 @@ function changeContent(section) {
             ✔ MySQL & Power BI Reporting<br>
             ✔ Data Analytics & Reporting<br>
             ✔ Team Leadership & Client Governance
-            
         `;
+
+        profileImage.src = "experties.png";   // Put your expertise related image
     }
 
     if(section === "education") {
@@ -521,6 +673,8 @@ function changeContent(section) {
             🎓 Advanced Excel & Automation Training <br>
             🎓 Continuous Learning in Data & Analytics
         `;
+
+        profileImage.src = "ed pic.png";   // Put your education related image
     }
 }
 
